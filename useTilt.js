@@ -45,7 +45,7 @@ export function requestPermissions(callback) {
 }
 
 export function useTilt() {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [tilt, setTilt] = useState({ alpha: 0, beta: 0, gamma: 0 });
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function useTilt() {
     function initializeTilt() {
       if (!initialized) {
         const orientationHandler = (event) => {
-          setTilt({ x: event.beta, y: event.gamma });
+          setTilt({ alpha: event.alpha, beta: event.beta, gamma: event.gamma });
         };
         window.addEventListener("deviceorientation", orientationHandler);
         setInitialized(true);
