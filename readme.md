@@ -91,8 +91,6 @@ export function useTilt() {
 }
 ```
 
-````
-
 ## Usage
 
 Once you have the `useTilt` hook in your project, you can use it in any React component to get the device's tilt data.
@@ -173,5 +171,3 @@ If you find any issues or have suggestions for improvements, feel free to open a
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
-
-````
