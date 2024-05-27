@@ -91,125 +91,55 @@ export function useTilt() {
 }
 ```
 
+````
+
 ## Usage
 
 Once you have the `useTilt` hook in your project, you can use it in any React component to get the device's tilt data.
 
 ### Example
 
-Here's an example of how to use the `useTilt` hook to move a grid of dots based on the device's tilt:
+Here's a simple example of how to use the `useTilt` hook to move a div based on the device's tilt:
 
-1. **Create a Dot Component**
+1. **Create a TiltedDiv Component**
 
-   This component renders a dot (sphere) and moves it based on the device's tilt.
-
-   **Dot.js**:
+   **TiltedDiv.js**:
 
    ```javascript
-   import React, { useRef, useEffect } from "react";
-   import { useFrame } from "@react-three/fiber";
-
-   const Dot = ({ position, tilt }) => {
-     const mesh = useRef();
-
-     useEffect(() => {
-       // Set initial position
-       mesh.current.position.set(...position);
-     }, [position]);
-
-     useFrame(() => {
-       // Adjust dot position based on device tilt
-       mesh.current.position.x = position[0] + tilt.y * 0.005;
-       mesh.current.position.y = position[1] - tilt.x * 0.005;
-       mesh.current.position.z = position[2]; // Keep z constant
-
-       // Mirror the position if the dot goes too far off screen
-       const boundary = 5; // Define boundary for mirroring
-       if (mesh.current.position.x > boundary) {
-         mesh.current.position.x = -boundary;
-       } else if (mesh.current.position.x < -boundary) {
-         mesh.current.position.x = boundary;
-       }
-       if (mesh.current.position.y > boundary) {
-         mesh.current.position.y = -boundary;
-       } else if (mesh.current.position.y < -boundary) {
-         mesh.current.position.y = boundary;
-       }
-     });
-
-     return (
-       <mesh ref={mesh} position={position}>
-         <sphereGeometry args={[0.1, 16, 16]} />
-         <meshStandardMaterial color="black" />
-       </mesh>
-     );
-   };
-
-   export default Dot;
-   ```
-
-2. **Create the Scene Component**
-
-   This component renders a grid of dots and uses the `useTilt` hook to move them.
-
-   **Scene.js**:
-
-   ```javascript
-   import React, { useRef, useEffect } from "react";
-   import { Canvas } from "@react-three/fiber";
-   import { OrbitControls } from "@react-three/drei";
-   import Dot from "./Dot";
+   import React from "react";
    import { useTilt } from "./useTilt";
 
-   const Scene = () => {
+   const TiltedDiv = () => {
      const tilt = useTilt();
-     const dotsRef = useRef([]);
 
-     // Create grid of dots
-     useEffect(() => {
-       const gridSize = 10;
-       const spacing = 1;
-       const dots = [];
+     const style = {
+       width: "100px",
+       height: "100px",
+       backgroundColor: "lightblue",
+       position: "absolute",
+       top: `calc(50% + ${tilt.x}px)`,
+       left: `calc(50% + ${tilt.y}px)`,
+       transform: "translate(-50%, -50%)",
+     };
 
-       for (let x = -gridSize / 2; x < gridSize / 2; x++) {
-         for (let y = -gridSize / 2; y < gridSize / 2; y++) {
-           dots.push({
-             id: `${x}-${y}`,
-             position: [x * spacing, y * spacing, 0], // Keep z constant at 0
-           });
-         }
-       }
-
-       dotsRef.current = dots;
-     }, []);
-
-     return (
-       <Canvas>
-         <ambientLight intensity={0.5} />
-         <pointLight position={[10, 10, 10]} />
-         <OrbitControls />
-         {dotsRef.current.map((dot) => (
-           <Dot key={dot.id} position={dot.position} tilt={tilt} />
-         ))}
-       </Canvas>
-     );
+     return <div style={style} />;
    };
 
-   export default Scene;
+   export default TiltedDiv;
    ```
 
-3. **Wrap the Scene Component in the App Component**
+2. **Wrap the TiltedDiv Component in the App Component**
 
    **App.js**:
 
    ```javascript
    import React from "react";
-   import Scene from "./Scene";
+   import TiltedDiv from "./TiltedDiv";
 
    const App = () => {
      return (
-       <div style={{ height: "100vh" }}>
-         <Scene />
+       <div style={{ height: "100vh", position: "relative" }}>
+         <TiltedDiv />
        </div>
      );
    };
@@ -217,7 +147,7 @@ Here's an example of how to use the `useTilt` hook to move a grid of dots based 
    export default App;
    ```
 
-4. **Modify the Main Entry File**
+3. **Modify the Main Entry File**
 
    Ensure your main entry point renders the `App` component.
 
@@ -243,3 +173,5 @@ If you find any issues or have suggestions for improvements, feel free to open a
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
+
+````
